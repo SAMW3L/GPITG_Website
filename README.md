@@ -1,1 +1,0 @@
-a website is verry poor in organisation and arrangements of contents . i become no different with previous one. please make it proffessional. this is a website for a company, company profile and services offered. remove blog section. this is a stastic website.

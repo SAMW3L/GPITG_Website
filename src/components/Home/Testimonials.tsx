@@ -93,7 +93,7 @@ const TestimonialsSection: React.FC = () => {
   };
 
   return (
-    <section className="py-20 bg-gray-50 dark:bg-gray-900 relative overflow-hidden">
+    <section className="py-20 bg-sky-50 dark:bg-sky-300 relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0">
         <div className="absolute top-20 left-10 w-20 h-20 bg-blue-200/20 dark:bg-blue-800/20 rounded-full"></div>
@@ -111,7 +111,7 @@ const TestimonialsSection: React.FC = () => {
         >
           <motion.div
             variants={itemVariants}
-            className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-600 to-teal-600 rounded-full mb-6"
+            className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-sky-300 to-teal-600 rounded-full mb-6"
           >
             <FiHeart className="w-8 h-8 text-white" />
           </motion.div>
@@ -125,7 +125,7 @@ const TestimonialsSection: React.FC = () => {
           
           <motion.p
             variants={itemVariants}
-            className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto"
+            className="text-xl text-gray-600 dark:text-white max-w-3xl mx-auto"
           >
             Real stories from organizations that have transformed their operations with our solutions
           </motion.p>
@@ -160,7 +160,7 @@ const TestimonialsSection: React.FC = () => {
                 <motion.div
                   variants={itemVariants}
                   whileHover={{ scale: 1.02, y: -5 }}
-                  className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg h-full"
+                  className="bg-white dark:bg-sky-800 rounded-2xl p-8 shadow-lg h-full"
                 >
                   {/* Product Tag */}
                   <div className="inline-block px-3 py-1 bg-gradient-to-r from-blue-100 to-teal-100 dark:from-blue-900/30 dark:to-teal-900/30 text-blue-600 dark:text-blue-400 text-sm font-semibold rounded-full mb-4">
@@ -219,13 +219,13 @@ const TestimonialsSection: React.FC = () => {
             variants={itemVariants}
             className="inline-block"
           >
-            <p className="text-gray-600 dark:text-gray-400 mb-6">
+            <p className="text-gray-600 dark:text-white mb-6">
               Ready to join these successful organizations?
             </p>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+              // onClick={() => document.getElementById('Contact')?.scrollIntoView({ behavior: 'smooth' })}
               className="bg-gradient-to-r from-blue-600 to-teal-600 text-white font-semibold px-8 py-3 rounded-lg hover:from-blue-700 hover:to-teal-700 transition-all shadow-lg"
             >
               Start Your Transformation
@@ -238,3 +238,145 @@ const TestimonialsSection: React.FC = () => {
 };
 
 export default TestimonialsSection;
+
+
+
+
+
+// import React, { useState, useEffect } from 'react';
+// import { motion, AnimatePresence } from 'framer-motion';
+// import { ChevronLeft, ChevronRight, Quote } from 'lucide-react';
+
+// const testimonials = [
+//   {
+//     id: 1,
+//     name: 'Sarah Johnson',
+//     position: 'CEO, TechStart',
+//     image: 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+//     content:
+//       'GPITG Limmited completely transformed our digital presence. Their team built us a beautiful website and helped us implement effective digital marketing strategies. We\'ve seen a significant increase in customer engagement and conversions.',
+//   },
+//   {
+//     id: 2,
+//     name: 'Michael Ochieng',
+//     position: 'Founder, EcoSolutions',
+//     image: 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+//     content:
+//       'Working with GPITG Limmited has been a game-changer for our business. They developed a custom system that streamlined our operations and improved efficiency. Their team is professional, responsive, and truly dedicated to helping us succeed.',
+//   },
+//   {
+//     id: 3,
+//     name: 'Amina Patel',
+//     position: 'Marketing Director, AfriGrowth',
+//     image: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+//     content:
+//       'The mobile app developed by GPITG Limmited exceeded our expectations. It\'s user-friendly, visually appealing, and has all the functionality we needed. Their team took the time to understand our requirements and delivered a solution that perfectly meets our needs.',
+//   },
+// ];
+
+// const TestimonialsSection: React.FC = () => {
+//   const [activeIndex, setActiveIndex] = useState(0);
+//   const [autoplay, setAutoplay] = useState(true);
+
+//   const nextTestimonial = () => {
+//     setActiveIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
+//   };
+
+//   const prevTestimonial = () => {
+//     setActiveIndex((prevIndex) => (prevIndex - 1 + testimonials.length) % testimonials.length);
+//   };
+
+//   useEffect(() => {
+//     if (!autoplay) return;
+
+//     const interval = setInterval(() => {
+//       nextTestimonial();
+//     }, 8000);
+
+//     return () => clearInterval(interval);
+//   }, [autoplay]);
+
+//   const handleNavigation = (direction: 'prev' | 'next') => {
+//     setAutoplay(false);
+//     if (direction === 'prev') {
+//       prevTestimonial();
+//     } else {
+//       nextTestimonial();
+//     }
+//   };
+
+//   return (
+//     <section className="py-20 bg-gradient-to-r from-sky-900 to-yellow-800 text-white">
+//       <div className="container mx-auto px-4">
+//         <div className="text-center mb-12">
+//           <h2 className="text-3xl md:text-4xl font-bold mb-4">What Our Clients Say</h2>
+//           <p className="text-xl text-blue-100 max-w-2xl mx-auto">
+//             Hear from businesses who have transformed their digital presence with our services.
+//           </p>
+//         </div>
+
+//         <div className="max-w-4xl mx-auto relative">
+//           <Quote className="absolute top-0 left-0 opacity-20 text-blue-300" size={64} />
+
+//           <div className="relative z-10">
+//             <AnimatePresence mode="wait">
+//               <motion.div
+//                 key={activeIndex}
+//                 initial={{ opacity: 0, y: 20 }}
+//                 animate={{ opacity: 1, y: 0 }}
+//                 exit={{ opacity: 0, y: -20 }}
+//                 transition={{ duration: 0.5 }}
+//                 className="bg-white/10 backdrop-blur-sm p-8 rounded-xl text-center"
+//               >
+//                 <div className="mb-6">
+//                   <img
+//                     src={testimonials[activeIndex].image}
+//                     alt={testimonials[activeIndex].name}
+//                     className="w-20 h-20 rounded-full mx-auto object-cover border-4 border-blue-400"
+//                   />
+//                 </div>
+//                 <p className="text-lg md:text-xl italic mb-6">{testimonials[activeIndex].content}</p>
+//                 <div>
+//                   <h4 className="text-xl font-bold">{testimonials[activeIndex].name}</h4>
+//                   <p className="text-blue-300">{testimonials[activeIndex].position}</p>
+//                 </div>
+//               </motion.div>
+//             </AnimatePresence>
+//           </div>
+
+//           <div className="flex justify-center mt-8 space-x-2">
+//             {testimonials.map((_, index) => (
+//               <button
+//                 key={index}
+//                 className={`w-3 h-3 rounded-full transition-colors ${
+//                   index === activeIndex ? 'bg-blue-400' : 'bg-blue-900'
+//                 }`}
+//                 onClick={() => setActiveIndex(index)}
+//                 aria-label={`Go to testimonial ${index + 1}`}
+//               />
+//             ))}
+//           </div>
+
+//           <div className="absolute top-1/2 -translate-y-1/2 left-0 right-0 flex justify-between pointer-events-none">
+//             <button
+//               onClick={() => handleNavigation('prev')}
+//               className="bg-black/30 hover:bg-black/50 text-white p-2 rounded-full transform -translate-x-1/2 pointer-events-auto"
+//               aria-label="Previous testimonial"
+//             >
+//               <ChevronLeft size={24} />
+//             </button>
+//             <button
+//               onClick={() => handleNavigation('next')}
+//               className="bg-black/30 hover:bg-black/50 text-white p-2 rounded-full transform translate-x-1/2 pointer-events-auto"
+//               aria-label="Next testimonial"
+//             >
+//               <ChevronRight size={24} />
+//             </button>
+//           </div>
+//         </div>
+//       </div>
+//     </section>
+//   );
+// };
+
+// export default TestimonialsSection;
