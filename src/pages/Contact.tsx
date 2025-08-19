@@ -265,25 +265,32 @@ const Contact: React.FC = () => {
               )}
             </motion.div>
 
-            {/* Map */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-              viewport={{ once: true }}
-            >
-              <h2 className="text-3xl font-bold mb-6">Our Location</h2>
-              <p className="text-gray-600 mb-8">
-                Visit us at our office in Dar es Salaam or schedule a virtual meeting.
-              </p>
-              <div className="rounded-lg overflow-hidden shadow-lg h-96 bg-gray-200">
-                {/* Placeholder for a map. In a real implementation, you would use Google Maps or another map service */}
-                <div className="w-full h-full flex items-center justify-center bg-gray-300">
-                  <MapPin size={48} className="text-gray-500" />
-                  <span className="ml-2 text-lg text-gray-600">Map of Dar es Salaam</span>
-                </div>
-              </div>
-            </motion.div>
+          
+           {/* Map */}
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
+                viewport={{ once: true }}
+        >
+                <h2 className="text-3xl font-bold mb-6">Our Location</h2>
+                 <p className="text-gray-600 mb-8">
+                   Visit us at our office in Dar es Salaam or schedule a virtual meeting.
+                  </p>
+                  <div className="rounded-lg overflow-hidden shadow-lg h-96">
+                    <iframe
+                      title="Map of Dar es Salaam"
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d507079.4195205728!2d39.26950000000001!3d-6.823489999999992!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x185c4f707fa231f1%3A0x92fba40052fab492!2sGPITG%20Limited!5e0!3m2!1sen!2stz!4v1755524113690!5m2!1sen!2stz"
+                      width="100%"
+                      height="100%"
+                      style={{ border: 0 }}
+                      allowFullScreen=""
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                 >               
+                    </iframe>
+                  </div>
+              </motion.div>
           </div>
         </div>
       </section>

@@ -22,7 +22,7 @@ const Hero: React.FC = () => {
           >
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
               <span className="block">Innovative ICT Solutions for Modern Africa</span>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-300 to-blue-400">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-300 via-blue-300 to-blue-400">
                 Business Growth
               </span>
             </h1>

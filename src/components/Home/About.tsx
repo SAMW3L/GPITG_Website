@@ -29,7 +29,7 @@ const AboutSection: React.FC = () => {
             </h2>
             <p className="text-gray-600 mb-6">
               GPITG Limmited is a leading IT services company based in Dar es Salaam, Tanzania. We specialize in 
-              providing innovative technology solutions that help businesses of all sizes achieve their goals 
+              providing innovative technology solutions that help clients achieve their goals 
               and stay ahead in today's competitive digital landscape.
             </p>
             <p className="text-gray-600 mb-8">
