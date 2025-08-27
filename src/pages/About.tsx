@@ -93,7 +93,7 @@ const About: React.FC = () => {
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">About GPITG Limmited</h1>
           <p className="text-xl text-blue-100 max-w-2xl mx-auto">
-We are a Tanzanian ICT organization dedicated to bridging the technology gap in Africa through innovative, locally developed solutions that deliver real results.
+              We are a Tanzanian ICT organization dedicated to bridging the technology gap in Africa through innovative, locally developed solutions that deliver real results.
           </p>
         </div>
       </div>

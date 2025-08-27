@@ -55,22 +55,27 @@ const AboutSection: React.FC = () => {
               Learn More About Us <ChevronRight size={18} className="ml-1" />
             </Link>
           </motion.div>
-
-          <motion.div
+            <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
             className="relative"
-          >
-            <div className="bg-blue-600 absolute top-8 -left-8 w-72 h-72 rounded-lg opacity-20 lg:block hidden"></div>
-            <div className="bg-blue-600 absolute -bottom-8 -right-8 w-72 h-72 rounded-lg opacity-20 lg:block hidden"></div>
-            <img
-              src="https://images.pexels.com/photos/3182812/pexels-photo-3182812.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-              alt="Team working together"
-              className="rounded-lg shadow-xl relative z-10 w-full"
-            />
-          </motion.div>
+            >
+            <div className="bg-blue-600 absolute top-8 -left-8 w-72 h-60 rounded-lg opacity-20 lg:block hidden"></div>
+            <div className="bg-blue-600 absolute -bottom-8 -right-8 w-60 h-72 rounded-lg opacity-20 lg:block hidden"></div>
+            <iframe
+              width="560"
+              height="400"
+              src="https://www.youtube.com/embed/gx7HSq35OJQ?autoplay=1"
+              title="eHMS NHIF  E-billing at Kinondoni Hospital"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
+              className="relative w-full h-[400px] rounded-lg shadow-lg"
+            ></iframe>
+            </motion.div>
         </div>
       </div>
     </section>

@@ -77,7 +77,7 @@ import React, {
     const generateResponse = (userMessage: string): string => {
   const lower = userMessage.toLowerCase();
 
-  // New and expanded responses for specific products and services
+  // responses for specific products and services
   if (/\b(ehms|electronic health|hospital management|healthcare system|ehms features)\b/.test(lower)) {
     return "eHMS is our comprehensive Electronic Health Management System. It's a locally developed solution that's integrated with NHIF electronic billing and supports interoperability with laboratory and radiology devices. Would you like to know more about its key features like patient management or telemedicine?";
   }
@@ -102,7 +102,7 @@ import React, {
     return "G-Tele is our telemedicine solution, seamlessly integrated with eHMS. It enables healthcare professionals to remotely diagnose and treat patients using secure file sharing and live video streaming. This platform makes quality healthcare more accessible.";
   }
   
-  // New responses for company information and other services
+  // responses for company information and other services
   if (/\b(about|mission|vision|who are you|what do you do)\b/.test(lower)) {
     return "We are GPITG Limmited, a Tanzanian IT consulting firm. Our mission is to transform public and private operations through the use of locally made and supported e-solutions. We specialize in custom software development, mobile apps, IT consulting, and system integration.";
   }

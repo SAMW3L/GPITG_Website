@@ -34,7 +34,7 @@ const Navbar: React.FC = () => {
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
           ? 'bg-white/90 backdrop-blur-md shadow-lg text-gray-800 py-2'
-          : 'bg-gradient-to-r from-white via-sky-200 to-sky-400 text-gray-500 py-4'
+          : 'bg-gradient-to-r from-white via-sky-200 to-sky-300 text-gray-800 py-2'
       }`}
     >
       <div className="container mx-auto px-4 md:px-6">
@@ -72,20 +72,7 @@ const Navbar: React.FC = () => {
             ))}
           </div>
 
-          {/* Desktop Contact Button */}
-          {/* <div className="hidden md:block">
-            <Link
-              to="/contact"
-              className={`px-5 py-2.5 font-medium rounded-md transition-colors duration-200 ${
-                scrolled
-                  ? 'bg-blue-600 text-white hover:bg-blue-700'
-                  : 'bg-white/10 text-white hover:bg-white/20'
-              }`}
-            >
-              Get a Quote
-            </Link>
-          </div> */}
-
+       
           {/* Mobile Menu Button */}
           <button
             onClick={toggleMenu}
@@ -120,12 +107,7 @@ const Navbar: React.FC = () => {
                 {link.name}
               </NavLink>
             ))}
-            {/* <Link
-              to="/contact"
-              className="mt-4 px-4 py-3 bg-blue-600 text-white font-medium rounded-md text-center hover:bg-blue-700 transition-colors"
-            >
-              Get a Quote
-            </Link> */}
+            
           </div>
         </div>
       </div>
