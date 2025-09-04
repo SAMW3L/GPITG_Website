@@ -5,7 +5,7 @@ import { ChevronRight } from 'lucide-react';
 
 const Hero: React.FC = () => {
   return (
-    <div className="relative bg-gradient-to-r from-sky-400  to-sky-900 overflow-hidden">
+    <div className="relative bg-gradient-to-r from-sky-400 to-sky-900 overflow-hidden">
       {/* Background pattern */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-10">
         <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-blue-600 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/4"></div>
@@ -35,13 +35,13 @@ const Hero: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="flex flex-col sm:flex-row justify-center gap-4 mb-12"
+            className="flex justify-center gap-4 mb-12"
           >
             <Link
               to="/contact"
               className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-6 rounded-md transition-colors shadow-lg hover:shadow-xl flex items-center justify-center"
             >
-              Get Involved <ChevronRight size={18} className="ml-1" />
+              Get Involved <ChevronRight size={8} className="ml-1" />
             </Link>
             <Link
               to="/services"
@@ -51,7 +51,6 @@ const Hero: React.FC = () => {
             </Link>
           </motion.div>
           
-  
         </div>
       </div>
     </div>

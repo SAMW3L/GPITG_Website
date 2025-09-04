@@ -13,11 +13,13 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
 import ChatProvider from './components/Chat/ChatProvider';
 import ChatWidget from './components/Chat/ChatWidget';
+import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   return (
     <ChatProvider>
       <Router>
+        <ScrollToTop /> {/* Add this line */}
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
