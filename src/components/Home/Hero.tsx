@@ -11,7 +11,7 @@ const Hero: React.FC = () => {
       id: 1,
       image: '/ehms.png',
       title: 'Electronic Health Management System',
-      subtitle: 'eHMS - Transforming Healthcare in Tanzania',
+      subtitle: 'eHMS - Transforming Healthcare',
       description: 'Comprehensive healthcare management system serving 100+ facilities across Tanzania with NHIF integration and real-time medical device connectivity.',
       cta: 'Explore eHMS',
       link: '/products'

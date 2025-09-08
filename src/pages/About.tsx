@@ -7,58 +7,65 @@ const About: React.FC = () => {
     document.title = 'About Us - GPITG Limmited';
   }, []);
 
-
-  //   {
-  //     id: 1,
-  //     name: 'Adelard Nsaho Kiliba',
-  //     position: 'CEO & Founder',
-  //     image: 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-  //   },
-  //   {
-  //     id: 2,
-  //     name: 'Madam Dola Woiso',
-  //     position: 'COO',
-  //     image: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-  //   },
-  //   {
-  //     id: 3,
-  //     name: 'Thomas Mwakalimbile',
-  //     position: 'Marketing Director',
-  //     image: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-  //   },
-  //   {
-  //     id: 4,
-  //     name: 'Mussa Machella',
-  //     position: 'CTO',
-  //     image: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      
-  //   },
-  //   {
-  //     id: 5,
-  //     name: 'Evance Mosha',
-  //     position: 'Lead Developer',
-  //     image: 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
-  //   },
-  //   {
-  //     id: 5,
-  //     name: 'Revocatus Mweusi',
-  //     position: 'Supervisor',
-  //     image: 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
-  //   },
-  //   {
-  //     id: 5,
-  //     name: 'Samwel Mwaipopo',
-  //     position: 'Nobody',
-  //     image: 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
-  //   },
-  //   {
-  //     id: 5,
-  //     name: 'Chief Nemes',
-  //     position: 'Chief',
-  //     image: 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
-  //   }
-  // ];
-
+  const partners = [
+    {
+      name: 'NMB BANK',
+      logo: '/nmbbank.png',
+      description: 'Leading financial institution in Tanzania',
+      category: 'Banking',
+      url: 'https://www.nmbbank.co.tz/',
+    },
+    {
+      name: 'CRDB BANK',
+      logo: '/crdbbabk.png',
+      description: 'Trusted banking partner for financial integration',
+      category: 'Banking',
+      url: 'https://www.crdbbank.co.tz',
+    },
+    {
+      name: 'AZANIA BANK',
+      logo: '/azaniabank.png',
+      description: 'Regional banking excellence and innovation',
+      category: 'Banking',
+      url: 'https://www.azaniabank.co.tz/',
+    },
+    {
+      name: 'NHIF',
+      logo: '/nhif.png',
+      description: 'National Health Insurance Fund - Healthcare financing',
+      category: 'Healthcare',
+      url: 'https://selfservice.nhif.or.tz/',
+    },
+    {
+      name: 'JUBILEE',
+      logo: '/jubilee.png',
+      description: 'Insurance and financial services provider',
+      category: 'Insurance',
+      url: 'https://jubileetanzania.co.tz/',
+    },
+    {
+      name: 'WCF',
+      logo: '/wcf.png',
+      description: 'Workers Compensation Fund - Employee insurance services',
+      category: 'Insurance',
+      url: 'https://www.wcf.go.tz/', 
+    },
+    {
+      name: 'MOH Tanzania',
+      logo: '/moh.png',
+      description: 'Ministry of Health Tanzania - Healthcare governance',
+      category: 'Government',
+      url: 'https://www.moh.go.tz/', 
+    },
+    {
+      name: 'eGA',
+      logo: '/ega.png',
+      description: 'e-Government Authority - Digital government services',
+      category: 'Government',
+      url: 'https://www.ega.go.tz/', 
+    },
+  ];
+ 
   const values = [
     {
       id: 1,
@@ -168,7 +175,70 @@ const About: React.FC = () => {
           </div>
         </div>
       </section>
+      
+{/* Partners */}
 
+<section className="py-20 bg-white">
+  <div className="container mx-auto px-4">
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      viewport={{ once: true }}
+      className="text-center mb-16"
+    >
+      <h2 className="text-3xl font-bold mb-4 text-gray-900"> 🤝 Our Trusted Partners</h2>
+      <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+        We collaborate with leading organizations across Tanzania to deliver comprehensive solutions that make a real impact in healthcare, finance, and government sectors.
+      </p>
+    </motion.div>
+
+    {/* Partners Grid */}
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mb-8">
+      {partners.map((partner, index) => (
+        <a 
+          key={partner.name} 
+          href={partner.url} 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          className="block"
+        >
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: index * 0.1 }}
+            viewport={{ once: true }}
+            whileHover={{ scale: 1.05, y: -5 }}
+            className="group bg-white rounded-2xl p-4 sm:p-6 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-sky-200 h-full flex flex-col justify-between"
+          >
+            <div className="aspect-w-16 aspect-h-9 flex items-center justify-center mb-4">
+              <img
+                src={partner.logo}
+                alt={partner.name}
+                className="w-12 h-12 sm:w-16 sm:h-16 object-contain group-hover:scale-110 transition-transform duration-300"
+                onError={(e) => {
+                  e.currentTarget.src = `https://via.placeholder.com/100x100/0ea5e9/ffffff?text=${partner.name.replace(' ', '+')}`;
+                }}
+              />
+            </div>
+            <div className="text-center">
+              <h3 className="font-bold text-gray-900 text-sm sm:text-base mb-1 group-hover:text-sky-600 transition-colors">
+                {partner.name}
+              </h3>
+              <p className="text-xs text-sky-600 mb-1 font-medium">
+                {partner.category}
+              </p>
+              <p className="text-xs text-gray-600 leading-tight">
+                {partner.description}
+              </p>
+            </div>
+          </motion.div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+---
       {/* Why Choose Us */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
