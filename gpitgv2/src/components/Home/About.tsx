@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { CheckCircle, ChevronRight, Users, Award, Target, Zap } from 'lucide-react';
 
-const AboutSection = () => {
+const AboutSection: React.FC = () => {
   const stats = [
     { number: '200+', label: 'Happy Clients', icon: <Users className="w-6 h-6" /> },
     { number: '100+', label: 'Healthcare Facilities', icon: <Award className="w-6 h-6" /> },
@@ -21,7 +21,7 @@ const AboutSection = () => {
   ];
 
   return (
-    <section id="about-section" className="py-20 bg-white font-inter">
+    <section id="about-section" className="py-20 bg-white">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left Column - Content */}
@@ -31,7 +31,9 @@ const AboutSection = () => {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <span className="text-blue-600 font-medium mb-2 block">About GPITG Limmited</span>
+//             <span className="text-blue-600 font-medium mb-2 block">About GPITG Limmited</span>
+             
+            
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
               Transforming Africa Through Technology
             </h2>
@@ -64,22 +66,14 @@ const AboutSection = () => {
                 </motion.div>
               ))}
             </div>
-            
-            {/* Learn More Button */}
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ type: "spring", stiffness: 400, damping: 17 }}
-              className="inline-flex"
+
+            <Link
+              to="/about"
+              className="group bg-sky-500 hover:bg-sky-600 text-white font-semibold py-3 px-8 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95 inline-flex items-center btn-bounce"
             >
-              <Link
-                to="/about"
-                className="group bg-sky-500 hover:bg-sky-600 text-white font-semibold py-3 px-8 rounded-full transition-all duration-300 shadow-lg inline-flex items-center"
-              >
-                Learn More About Us
-                <ChevronRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </motion.div>
+              Learn More About Us
+              <ChevronRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
+            </Link>
           </motion.div>
 
           {/* Right Column - Video & Stats */}
@@ -113,10 +107,8 @@ const AboutSection = () => {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
                   viewport={{ once: true }}
-                  className="bg-gradient-to-br from-sky-50 to-sky-100 rounded-xl p-6 text-center shadow-md cursor-pointer"
+                  className="bg-gradient-to-br from-sky-50 to-sky-100 rounded-xl p-6 text-center hover:shadow-lg transition-all duration-300 transform hover:scale-105"
                 >
                   <div className="flex justify-center mb-3">
                     <div className="p-2 bg-sky-500 text-white rounded-lg">

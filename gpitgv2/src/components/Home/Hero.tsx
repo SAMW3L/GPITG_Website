@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronRight, ChevronLeft } from 'lucide-react';
+import { ChevronRight, Play, ChevronLeft, ArrowDown } from 'lucide-react';
 
 const Hero: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -60,6 +60,10 @@ const Hero: React.FC = () => {
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
   };
 
+  const scrollToNext = () => {
+    const nextSection = document.getElementById('about-section');
+    nextSection?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
     <section className="relative h-screen overflow-hidden">
@@ -100,6 +104,15 @@ const Hero: React.FC = () => {
                 transition={{ duration: 0.8 }}
                 className="text-white"
               >
+                <motion.span
+                  initial={{ opacity: 0, x: -30 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="inline-block px-4 py-2 bg-sky-500/20 backdrop-blur-sm rounded-full text-sm font-medium mb-4"
+                >
+                  🚀 Leading ICT Solutions in Tanzania
+                </motion.span>
+                
                 <motion.h1
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -145,8 +158,8 @@ const Hero: React.FC = () => {
                     to="/contact"
                     className="group bg-transparent border-2 border-white text-white hover:bg-white hover:text-sky-900 font-semibold py-4 px-8 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95 flex items-center justify-center btn-bounce"
                   >
-                    <ChevronRight size={18} className="mr-2" />
-                    Request Demo
+                    <Play size={18} className="mr-2" />
+                    Watch Demo
                   </Link>
                 </motion.div>
               </motion.div>
@@ -186,6 +199,26 @@ const Hero: React.FC = () => {
       >
         <ChevronRight size={24} />
       </button>
+
+      {/* Scroll Indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.2 }}
+        className="absolute bottom-8 right-8 cursor-pointer z-30"
+        onClick={scrollToNext}
+      >
+        <div className="flex flex-col items-center text-white hover:text-sky-300 transition-colors">
+          <span className="text-sm mb-2 font-medium">Scroll Down</span>
+          <motion.div
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 2, repeat: Infinity }}
+            className="p-2 bg-white/20 backdrop-blur-sm rounded-full"
+          >
+            <ArrowDown size={20} />
+          </motion.div>
+        </div>
+      </motion.div>
     </section>
   );
 };

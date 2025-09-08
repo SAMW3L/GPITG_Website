@@ -4,7 +4,7 @@ import { Phone, Mail, MapPin, Facebook, Twitter, Linkedin, Instagram, Code } fro
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-gray-900 text-white pt-16 pb-8">
+    <footer className="bg-gradient-to-br from-gray-900 via-sky-900 to-gray-900 text-white pt-20 pb-8 relative overflow-hidden">
       <div className="container mx-auto px-4 md:px-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Information */}
@@ -15,7 +15,6 @@ const Footer: React.FC = () => {
                 alt="GPITG Logo" 
                 className="h-12 mr-1 rounded-lg" 
               />
-              {/* <span className="font-bold text-xl">GPITG <p>Limited</p></span> */}
             </div>
 
 
