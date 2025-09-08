@@ -22,7 +22,7 @@ const Hero: React.FC = () => {
       title: 'Point of Sale System',
       subtitle: 'G-PoS - Retail Excellence',
       description: 'Advanced POS system for retail and wholesale businesses with inventory management, TRA integration, and multi-payment support.',
-      cta: 'View G-PoS',
+      cta: 'View More About G-PoS',
       link: '/products'
     },
     {
@@ -31,7 +31,7 @@ const Hero: React.FC = () => {
       title: 'Digital Payment Solution',
       subtitle: 'G-Pesa - Business Automation',
       description: 'Integrated payment system connecting banks and mobile networks with ERP design for complete business automation.',
-      cta: 'Discover G-Pesa',
+      cta: 'Discover More About G-Pesa',
       link: '/products'
     },
     {
