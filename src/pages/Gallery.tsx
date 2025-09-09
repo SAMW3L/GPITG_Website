@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Play, Calendar, Search, Filter, Image as ImageIcon, Video } from 'lucide-react';
+import { X, Play, Calendar, Search, Image as ImageIcon, Video } from 'lucide-react';
+import axios from 'axios';
+import { API_BASE_URL } from '../../Constants';
+
 
 interface GalleryItem {
-  id: string;
+  id: number; // Use number to match Laravel's ID type
   title: string;
   description: string;
   type: 'image' | 'video';
@@ -17,21 +20,30 @@ const Gallery: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<'all' | 'image' | 'video'>('all');
   const [filteredItems, setFilteredItems] = useState<GalleryItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
+  // Effect to fetch gallery items from the backend
   useEffect(() => {
     document.title = 'Gallery - GPITG Limited';
-    
-    // Load gallery from localStorage
-    const savedGallery = localStorage.getItem('gpitg_gallery');
-    if (savedGallery) {
-      const gallery = JSON.parse(savedGallery);
-      setGalleryItems(gallery);
-      setFilteredItems(gallery);
-    }
+
+    const fetchGallery = async () => {
+      try {
+        const response = await axios.get(`${API_BASE_URL}/gallery`);
+        const sortedItems = response.data.sort((a: GalleryItem, b: GalleryItem) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        setGalleryItems(sortedItems);
+        setFilteredItems(sortedItems);
+      } catch (error) {
+        console.error('Failed to fetch gallery:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchGallery();
   }, []);
 
+  // Effect for filtering based on search and type
   useEffect(() => {
-    // Filter gallery based on search term and type
     let filtered = galleryItems;
 
     if (searchTerm) {
@@ -61,14 +73,9 @@ const Gallery: React.FC = () => {
   };
 
   const getYouTubeEmbedUrl = (url: string) => {
-    if (url.includes('youtube.com/watch?v=')) {
-      const videoId = url.split('v=')[1].split('&')[0];
-      return `https://www.youtube.com/embed/${videoId}`;
-    } else if (url.includes('youtu.be/')) {
-      const videoId = url.split('youtu.be/')[1].split('?')[0];
-      return `https://www.youtube.com/embed/${videoId}`;
-    }
-    return url;
+    const videoIdMatch = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|v\/|shorts\/))([\w-]{11})/);
+    const videoId = videoIdMatch ? videoIdMatch[1] : null;
+    return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
   };
 
   return (
@@ -145,8 +152,16 @@ const Gallery: React.FC = () => {
           </div>
         </motion.div>
 
+        {/* Loading State */}
+        {isLoading && (
+          <div className="text-center py-24">
+            <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-sky-500 mx-auto mb-4"></div>
+            <p className="text-gray-600 text-lg">Loading gallery...</p>
+          </div>
+        )}
+
         {/* Gallery Grid */}
-        {filteredItems.length > 0 ? (
+        {!isLoading && filteredItems.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredItems.map((item, index) => (
               <motion.div
@@ -206,36 +221,39 @@ const Gallery: React.FC = () => {
             ))}
           </div>
         ) : (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className="text-center py-16"
-          >
-            <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <ImageIcon className="w-12 h-12 text-gray-400" />
-            </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
-              {searchTerm || filterType !== 'all' ? 'No items found' : 'No gallery items available'}
-            </h3>
-            <p className="text-gray-600 max-w-md mx-auto">
-              {searchTerm || filterType !== 'all'
-                ? 'Try adjusting your search terms or filters.'
-                : 'Check back later for photos and videos from GPITG Limited.'
-              }
-            </p>
-            {(searchTerm || filterType !== 'all') && (
-              <button
-                onClick={() => {
-                  setSearchTerm('');
-                  setFilterType('all');
-                }}
-                className="mt-6 bg-sky-600 hover:bg-sky-700 text-white px-6 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 active:scale-95"
-              >
-                Show All Items
-              </button>
-            )}
-          </motion.div>
+          /* Empty State */
+          !isLoading && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
+              className="text-center py-16"
+            >
+              <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <ImageIcon className="w-12 h-12 text-gray-400" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                {searchTerm || filterType !== 'all' ? 'No items found' : 'No gallery items available'}
+              </h3>
+              <p className="text-gray-600 max-w-md mx-auto">
+                {searchTerm || filterType !== 'all'
+                  ? 'Try adjusting your search terms or filters.'
+                  : 'Check back later for photos and videos from GPITG Limited.'
+                }
+              </p>
+              {(searchTerm || filterType !== 'all') && (
+                <button
+                  onClick={() => {
+                    setSearchTerm('');
+                    setFilterType('all');
+                  }}
+                  className="mt-6 bg-sky-600 hover:bg-sky-700 text-white px-6 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 active:scale-95"
+                >
+                  Show All Items
+                </button>
+              )}
+            </motion.div>
+          )
         )}
       </div>
 

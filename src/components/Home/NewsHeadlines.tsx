@@ -4,13 +4,17 @@ import { Calendar, User, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Marquee from 'react-fast-marquee';
 import Slider from 'react-slick';
+import axios from 'axios';
+import { API_BASE_URL } from '../../../Constants';  
 
 // Import slick carousel CSS
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
+
+
 interface NewsItem {
-  id: string;
+  id: number; // Use number to match Laravel's ID type
   title: string;
   description: string;
   content: string;
@@ -24,12 +28,19 @@ const NewsHeadlines: React.FC = () => {
   const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
   const navigate = useNavigate();
 
+  // Fetch news from the API on component mount
   useEffect(() => {
-    // Load news from localStorage or fetch from API
-    const savedNews = localStorage.getItem('gpitg_news');
-    if (savedNews) {
-      setNewsItems(JSON.parse(savedNews));
-    }
+    const fetchNews = async () => {
+      try {
+        const response = await axios.get(`${API_BASE_URL}/news`);
+        // Sort news by date in descending order (newest first)
+        const sortedNews = response.data.sort((a: NewsItem, b: NewsItem) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        setNewsItems(sortedNews);
+      } catch (error) {
+        console.error('Failed to fetch news headlines:', error);
+      }
+    };
+    fetchNews();
   }, []);
 
   const formatDate = (dateString: string) => {
@@ -70,7 +81,7 @@ const NewsHeadlines: React.FC = () => {
 
   return (
     <div className="pt-16 pb-16 bg-gray-100 font-sans">
-      {/* Marquee Section - Refined look */}
+      {/* Marquee Section */}
       <div className="bg-sky-700 text-white py-3 overflow-hidden shadow-lg">
         <Marquee gradient={false} speed={40} pauseOnHover={true}>
           {newsItems.length > 0 ? (
@@ -130,6 +141,9 @@ const NewsHeadlines: React.FC = () => {
                         src={item.image || 'https://images.pexels.com/photos/3183153/pexels-photo-3183153.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&dpr=1'}
                         alt={item.title}
                         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                        onError={(e) => {
+                          e.currentTarget.src = 'https://images.pexels.com/photos/3183153/pexels-photo-3183153.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&dpr=1';
+                        }}
                       />
                     </div>
 

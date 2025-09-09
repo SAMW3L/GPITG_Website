@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { User, Lock, Eye, EyeOff, Plus, Edit, Trash2, Image, Video, Calendar, FileText } from 'lucide-react';
+import axios from 'axios';
+import { API_BASE_URL } from '../../Constants';
+
 
 interface NewsItem {
-  id: string;
+  id: number; // Use number to match Laravel's ID type
   title: string;
   description: string;
   content: string;
@@ -14,7 +17,7 @@ interface NewsItem {
 }
 
 interface GalleryItem {
-  id: string;
+  id: number; // Use number to match Laravel's ID type
   title: string;
   description: string;
   type: 'image' | 'video';
@@ -35,119 +38,155 @@ const Admin: React.FC = () => {
   const [editingGallery, setEditingGallery] = useState<GalleryItem | null>(null);
 
   const [newsForm, setNewsForm] = useState({
-    title: '',
-    description: '',
-    content: '',
-    image: '',
-    video: '',
+    title: '', description: '', content: '', image: '', video: '',
     date: new Date().toISOString().split('T')[0]
   });
 
   const [galleryForm, setGalleryForm] = useState({
-    title: '',
-    description: '',
-    type: 'image' as 'image' | 'video',
-    url: '',
-    date: new Date().toISOString().split('T')[0]
+    title: '', description: '', type: 'image' as 'image' | 'video', url: '',
+    date: new Date().toISOString().split('T')[0],
+    mediaFile: null as File | null
   });
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Use a single useEffect to handle authentication and initial data fetching
   useEffect(() => {
     document.title = 'Admin Panel - GPITG Limited';
-    // Load data from localStorage
-    const savedNews = localStorage.getItem('gpitg_news');
-    const savedGallery = localStorage.getItem('gpitg_gallery');
-    
-    if (savedNews) setNewsItems(JSON.parse(savedNews));
-    if (savedGallery) setGalleryItems(JSON.parse(savedGallery));
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      setIsLoggedIn(true);
+      fetchData();
+    }
   }, []);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const fetchData = async () => {
+    try {
+      const newsResponse = await axios.get(`${API_BASE_URL}/news`);
+      setNewsItems(newsResponse.data);
+      
+      const galleryResponse = await axios.get(`${API_BASE_URL}/gallery`);
+      setGalleryItems(galleryResponse.data);
+    } catch (error) {
+      console.error('Failed to fetch data', error);
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        handleLogout();
+      }
+    }
+  };
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simple authentication (in production, use proper authentication)
-    if (loginForm.username === 'admin' && loginForm.password === 'gpitg2024') {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/login`, loginForm);
+      const { token } = response.data;
+      localStorage.setItem('authToken', token);
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       setIsLoggedIn(true);
-      localStorage.setItem('gpitg_admin_logged_in', 'true');
-    } else {
+      fetchData(); // Fetch data immediately after successful login
+    } catch (error) {
       alert('Invalid credentials');
     }
   };
 
   const handleLogout = () => {
+    localStorage.removeItem('authToken');
+    delete axios.defaults.headers.common['Authorization'];
     setIsLoggedIn(false);
-    localStorage.removeItem('gpitg_admin_logged_in');
   };
 
-  const handleNewsSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const newItem: NewsItem = {
-      id: editingNews ? editingNews.id : Date.now().toString(),
-      ...newsForm,
-      author: 'Admin'
-    };
-
-    let updatedNews;
-    if (editingNews) {
-      updatedNews = newsItems.map(item => item.id === editingNews.id ? newItem : item);
-    } else {
-      updatedNews = [newItem, ...newsItems];
-    }
-
-    setNewsItems(updatedNews);
-    localStorage.setItem('gpitg_news', JSON.stringify(updatedNews));
-    
-    setNewsForm({
-      title: '',
-      description: '',
-      content: '',
-      image: '',
-      video: '',
-      date: new Date().toISOString().split('T')[0]
-    });
+  const resetNewsForm = () => {
     setShowNewsForm(false);
     setEditingNews(null);
-  };
-
-  const handleGallerySubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const newItem: GalleryItem = {
-      id: editingGallery ? editingGallery.id : Date.now().toString(),
-      ...galleryForm
-    };
-
-    let updatedGallery;
-    if (editingGallery) {
-      updatedGallery = galleryItems.map(item => item.id === editingGallery.id ? newItem : item);
-    } else {
-      updatedGallery = [newItem, ...galleryItems];
-    }
-
-    setGalleryItems(updatedGallery);
-    localStorage.setItem('gpitg_gallery', JSON.stringify(updatedGallery));
-    
-    setGalleryForm({
-      title: '',
-      description: '',
-      type: 'image',
-      url: '',
+    setNewsForm({
+      title: '', description: '', content: '', image: '', video: '',
       date: new Date().toISOString().split('T')[0]
     });
-    setShowGalleryForm(false);
-    setEditingGallery(null);
   };
 
-  const deleteNews = (id: string) => {
-    if (confirm('Are you sure you want to delete this news item?')) {
-      const updatedNews = newsItems.filter(item => item.id !== id);
-      setNewsItems(updatedNews);
-      localStorage.setItem('gpitg_news', JSON.stringify(updatedNews));
+  const resetGalleryForm = () => {
+    setShowGalleryForm(false);
+    setEditingGallery(null);
+    setGalleryForm({
+      title: '', description: '', type: 'image', url: '',
+      date: new Date().toISOString().split('T')[0],
+      mediaFile: null
+    });
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
     }
   };
 
-  const deleteGallery = (id: string) => {
-    if (confirm('Are you sure you want to delete this gallery item?')) {
-      const updatedGallery = galleryItems.filter(item => item.id !== id);
-      setGalleryItems(updatedGallery);
-      localStorage.setItem('gpitg_gallery', JSON.stringify(updatedGallery));
+  const handleNewsSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const payload = { ...newsForm, author: 'Admin' };
+    try {
+      if (editingNews) {
+        await axios.put(`${API_BASE_URL}/news/${editingNews.id}`, payload);
+      } else {
+        await axios.post(`${API_BASE_URL}/news`, payload);
+      }
+      fetchData();
+      resetNewsForm();
+    } catch (error) {
+      console.error('Failed to save news:', error);
+      alert('Failed to save news. Please check your inputs.');
+    }
+  };
+
+  const handleGallerySubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append('title', galleryForm.title);
+    formData.append('description', galleryForm.description);
+    formData.append('type', galleryForm.type);
+    formData.append('date', galleryForm.date);
+    
+    // Append the file or URL based on user input
+    if (galleryForm.mediaFile) {
+      formData.append('file', galleryForm.mediaFile);
+    } else if (galleryForm.url) {
+      formData.append('url', galleryForm.url);
+    }
+
+    try {
+      if (editingGallery) {
+        // Laravel needs a specific method override for PUT with FormData
+        formData.append('_method', 'PUT');
+        await axios.post(`${API_BASE_URL}/gallery/${editingGallery.id}`, formData);
+      } else {
+        await axios.post(`${API_BASE_URL}/gallery`, formData);
+      }
+      fetchData();
+      resetGalleryForm();
+    } catch (error) {
+      console.error('Failed to save gallery item:', error);
+      alert('Failed to save gallery item. Please check your inputs.');
+    }
+  };
+
+  const deleteNews = async (id: number) => {
+    if (window.confirm('Are you sure you want to delete this news item?')) {
+      try {
+        await axios.delete(`${API_BASE_URL}/news/${id}`);
+        fetchData();
+      } catch (error) {
+        console.error('Failed to delete news:', error);
+        alert('Failed to delete news. Please try again.');
+      }
+    }
+  };
+
+  const deleteGallery = async (id: number) => {
+    if (window.confirm('Are you sure you want to delete this gallery item?')) {
+      try {
+        await axios.delete(`${API_BASE_URL}/gallery/${id}`);
+        fetchData();
+      } catch (error) {
+        console.error('Failed to delete gallery item:', error);
+        alert('Failed to delete gallery item. Please try again.');
+      }
     }
   };
 
@@ -171,7 +210,8 @@ const Admin: React.FC = () => {
       description: item.description,
       type: item.type,
       url: item.url,
-      date: item.date
+      date: item.date,
+      mediaFile: null
     });
     setShowGalleryForm(true);
   };
@@ -386,18 +426,7 @@ const Admin: React.FC = () => {
                         </button>
                         <button
                           type="button"
-                          onClick={() => {
-                            setShowNewsForm(false);
-                            setEditingNews(null);
-                            setNewsForm({
-                              title: '',
-                              description: '',
-                              content: '',
-                              image: '',
-                              video: '',
-                              date: new Date().toISOString().split('T')[0]
-                            });
-                          }}
+                          onClick={resetNewsForm}
                           className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg transition-colors"
                         >
                           Cancel
@@ -495,31 +524,6 @@ const Admin: React.FC = () => {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Type</label>
-                        <select
-                          value={galleryForm.type}
-                          onChange={(e) => setGalleryForm({...galleryForm, type: e.target.value as 'image' | 'video'})}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500"
-                        >
-                          <option value="image">Image</option>
-                          <option value="video">Video</option>
-                        </select>
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          {galleryForm.type === 'image' ? 'Image URL' : 'Video URL'}
-                        </label>
-                        <input
-                          type="url"
-                          value={galleryForm.url}
-                          onChange={(e) => setGalleryForm({...galleryForm, url: e.target.value})}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500"
-                          required
-                        />
-                      </div>
-
-                      <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
                         <textarea
                           value={galleryForm.description}
@@ -528,6 +532,41 @@ const Admin: React.FC = () => {
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500"
                           required
                         />
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">Type</label>
+                          <select
+                            value={galleryForm.type}
+                            onChange={(e) => setGalleryForm({...galleryForm, type: e.target.value as 'image' | 'video'})}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500"
+                          >
+                            <option value="image">Image</option>
+                            <option value="video">Video</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            {galleryForm.type === 'image' ? 'Image File/URL' : 'Video File/URL'}
+                          </label>
+                          <div className="flex space-x-2">
+                            <input
+                              type="file"
+                              ref={fileInputRef}
+                              onChange={(e) => setGalleryForm({...galleryForm, mediaFile: e.target.files?.[0] || null, url: ''})}
+                              className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100"
+                            />
+                            <span className="self-center text-gray-400">or</span>
+                            <input
+                              type="url"
+                              placeholder="Paste URL"
+                              value={galleryForm.url}
+                              onChange={(e) => setGalleryForm({...galleryForm, url: e.target.value, mediaFile: null})}
+                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500"
+                            />
+                          </div>
+                        </div>
                       </div>
 
                       <div className="flex space-x-4">
@@ -539,17 +578,7 @@ const Admin: React.FC = () => {
                         </button>
                         <button
                           type="button"
-                          onClick={() => {
-                            setShowGalleryForm(false);
-                            setEditingGallery(null);
-                            setGalleryForm({
-                              title: '',
-                              description: '',
-                              type: 'image',
-                              url: '',
-                              date: new Date().toISOString().split('T')[0]
-                            });
-                          }}
+                          onClick={resetGalleryForm}
                           className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg transition-colors"
                         >
                           Cancel

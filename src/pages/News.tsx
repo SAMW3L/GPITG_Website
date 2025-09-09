@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Calendar, User, Search, ArrowLeft, ArrowRight } from 'lucide-react';
+import axios from 'axios';
+
+// Define the base URL for your Laravel API
+const API_URL = 'http://localhost:8000/api';
 
 interface NewsItem {
-  id: string;
+  id: number;
   title: string;
   description: string;
   content: string;
@@ -18,18 +22,29 @@ const News: React.FC = () => {
   const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredNews, setFilteredNews] = useState<NewsItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
+  // Use a single useEffect to handle data fetching from the API
   useEffect(() => {
     document.title = 'News - GPITG Limited';
 
-    const savedNews = localStorage.getItem('gpitg_news');
-    if (savedNews) {
-      const news = JSON.parse(savedNews);
-      setNewsItems(news);
-      setFilteredNews(news);
-    }
+    const fetchNews = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/news`);
+        const sortedNews = response.data.sort((a: NewsItem, b: NewsItem) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        setNewsItems(sortedNews);
+        setFilteredNews(sortedNews); // Initialize filtered news with all items
+      } catch (error) {
+        console.error('Failed to fetch news:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchNews();
   }, []);
 
+  // Effect for filtering news based on search term
   useEffect(() => {
     const filtered = newsItems.filter(item =>
       item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -83,7 +98,7 @@ const News: React.FC = () => {
               {selectedNews.image && (
                 <div className="w-full h-80 md:h-96 bg-gray-200 overflow-hidden">
                   <img
-                    src={selectedNews.image || 'https://images.pexels.com/photos/3183153/pexels-photo-3183153.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'} 
+                    src={selectedNews.image}
                     alt={selectedNews.title}
                     className="w-full h-full object-cover"
                     onError={(e) => {
@@ -132,7 +147,7 @@ const News: React.FC = () => {
                     More Articles
                   </h2>
                   <div className="space-y-6">
-                    {relatedNews.map((item, index) => (
+                    {relatedNews.map((item) => (
                       <article
                         key={item.id}
                         className="flex items-center space-x-4 cursor-pointer group"
@@ -171,7 +186,7 @@ const News: React.FC = () => {
     );
   }
 
-  // All News Grid View - Unchanged from previous version
+  // All News Grid View
   return (
     <div className="pt-24 min-h-screen bg-gray-100 font-sans">
       <div className="bg-gradient-to-r from-sky-500 via-slate-400 to-sky-500 text-white py-20 md:py-24">
@@ -208,7 +223,16 @@ const News: React.FC = () => {
           />
         </motion.div>
 
-        {filteredNews.length > 0 ? (
+        {/* Loading State */}
+        {isLoading && (
+          <div className="text-center py-24">
+            <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-sky-500 mx-auto mb-4"></div>
+            <p className="text-gray-600 text-lg">Loading news...</p>
+          </div>
+        )}
+
+        {/* Content State */}
+        {!isLoading && filteredNews.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
             {filteredNews.map((item, index) => (
               <motion.article
@@ -259,33 +283,36 @@ const News: React.FC = () => {
             ))}
           </div>
         ) : (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className="text-center py-24"
-          >
-            <div className="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Search className="w-12 h-12 text-gray-500" />
-            </div>
-            <h3 className="text-2xl font-bold text-gray-800 mb-4">
-              {searchTerm ? 'No news found' : 'No news available'}
-            </h3>
-            <p className="text-gray-600 max-w-md mx-auto">
-              {searchTerm
-                ? 'Try adjusting your search terms or clear the search to view all news.'
-                : 'Check back later for the latest updates and announcements from GPITG Limited.'
-              }
-            </p>
-            {searchTerm && (
-              <button
-                onClick={() => setSearchTerm('')}
-                className="mt-6 bg-sky-600 hover:bg-sky-700 text-white px-8 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 active:scale-95 font-semibold"
-              >
-                Show All News
-              </button>
-            )}
-          </motion.div>
+          /* Empty State */
+          !isLoading && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
+              className="text-center py-24"
+            >
+              <div className="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Search className="w-12 h-12 text-gray-500" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-800 mb-4">
+                {searchTerm ? 'No news found' : 'No news available'}
+              </h3>
+              <p className="text-gray-600 max-w-md mx-auto">
+                {searchTerm
+                  ? 'Try adjusting your search terms or clear the search to view all news.'
+                  : 'Check back later for the latest updates and announcements from GPITG Limited.'
+                }
+              </p>
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm('')}
+                  className="mt-6 bg-sky-600 hover:bg-sky-700 text-white px-8 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 active:scale-95 font-semibold"
+                >
+                  Show All News
+                </button>
+              )}
+            </motion.div>
+          )
         )}
       </div>
     </div>
