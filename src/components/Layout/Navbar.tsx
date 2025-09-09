@@ -20,6 +20,12 @@ const Navbar: React.FC = () => {
 
   useEffect(() => closeMenu(), [location.pathname]);
 
+  const mediaLinks = [
+    { name: 'News', path: '/news' },
+    { name: 'Gallery', path: '/gallery' },
+   
+  ];
+
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'About', path: '/about' },
@@ -27,6 +33,7 @@ const Navbar: React.FC = () => {
     { name: 'Products', path: '/products' },
     { name: 'FAQ', path: '/faq' },
     { name: 'Contact', path: '/contact' },
+    
   ];
 
   return (
@@ -62,7 +69,28 @@ const Navbar: React.FC = () => {
                 {link.name}
               </NavLink>
             ))}
-                      
+            {/* Media Center Dropdown */}
+            <div className="relative group">
+              <button className="px-4 py-2 rounded-md font-medium text-gray-800 hover:bg-gray-200 flex items-center focus:outline-none">
+                Media Center
+                <svg className="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
+              </button>
+              <div className="absolute left-0 mt-2 w-40 bg-white rounded-md shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity z-30">
+                <div className="py-2">
+                  {mediaLinks.map((link) => (
+                    <NavLink
+                      key={link.path}
+                      to={link.path}
+                      className={({ isActive }) =>
+                        `block px-4 py-2 text-gray-700 hover:bg-blue-50 ${isActive ? 'bg-blue-100 text-blue-700' : ''}`
+                      }
+                    >
+                      {link.name}
+                    </NavLink>
+                  ))}
+                </div>
+              </div>
+            </div>
             {/* Contact Info */}
             <div className="flex items-center space-x-4 ml-6 pl-6 border-l border-gray-200">
               <a
@@ -106,7 +134,21 @@ const Navbar: React.FC = () => {
                 {link.name}
               </NavLink>
             ))}
-           
+            {/* Media Center Dropdown for Mobile */}
+            <div className="border-t pt-2 mt-2">
+              <span className="block px-4 py-2 font-medium text-gray-800">Media Center</span>
+              {mediaLinks.map((link) => (
+                <NavLink
+                  key={link.path}
+                  to={link.path}
+                  className={({ isActive }) =>
+                    `block px-4 py-2 rounded-md text-gray-700 ${isActive ? 'bg-blue-100 text-blue-700' : 'hover:bg-gray-100'}`
+                  }
+                >
+                  {link.name}
+                </NavLink>
+              ))}
+            </div>
           </div>
         </div>
       </div>

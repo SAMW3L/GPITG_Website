@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import Hero from '../components/Home/Hero';
 import ServicesSection from '../components/Home/Services';
 import AboutSection from '../components/Home/About';
-// import TestimonialsSection from '../components/Home/Testimonials';
+import News from '../components/Home/News';
 import StatsSection from '../components/Home/Stats';
 // import CtaSection from '../components/Home/Cta';
 
@@ -17,7 +17,7 @@ const Home: React.FC = () => {
       <StatsSection />
       <AboutSection />
       <ServicesSection />
-      {/* <TestimonialsSection /> */}
+      <News />
       {/* <CtaSection /> */}
     </>
   );

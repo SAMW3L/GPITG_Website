@@ -9,6 +9,9 @@ import Faq from './pages/Faq';
 import Careers from './pages/Careers'
 import Products from './pages/Products';
 import NotFound from './pages/NotFound';
+import AdminPortal from './pages/Admin';
+import News from './pages/News';
+import Gallery from './pages/Gallery';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
 import ChatProvider from './components/Chat/ChatProvider';
@@ -19,7 +22,7 @@ function App() {
   return (
     <ChatProvider>
       <Router>
-        <ScrollToTop /> {/* Add this line */}
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
@@ -31,6 +34,9 @@ function App() {
             <Route path="careers" element={<Careers />} />
             <Route path="privacy-policy" element={<PrivacyPolicy />} />
             <Route path="terms-of-service" element={<TermsOfService />} />
+            <Route path="admin" element={<AdminPortal />} />
+            <Route path="news" element={<News />} />
+            <Route path="gallery" element={<Gallery />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

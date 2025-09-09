@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Phone, Mail, MapPin, Facebook, Twitter, Linkedin, Instagram, Code } from 'lucide-react';
+import { Phone, Mail, MapPin, Facebook, Twitter, Linkedin, Instagram, User } from 'lucide-react';
 
 const Footer: React.FC = () => {
   return (
@@ -120,11 +120,18 @@ const Footer: React.FC = () => {
                   FAQ
                 </Link>
               </li>
+
+              <li>
+                <Link to="http://41.188.172.204:4001" className="text-gray-400 hover:text-white transition-colors">
+                  eHMS Support Portal
+                </Link>
+              </li>
               <li>
                 <Link to="/careers" className="text-gray-400 hover:text-white transition-colors">
                   Careers
                 </Link>
               </li>
+              
             </ul>
           </div>
 
@@ -218,6 +225,14 @@ const Footer: React.FC = () => {
             <Link to="/terms-of-service" className="text-gray-500 hover:text-white transition-colors">
               Terms of Service
             </Link>
+            <a
+              href="/login"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-500 hover:text-white transition-colors flex items-center"
+            >
+              <User size={16} className="mr-1" /> Admin Portal
+            </a>
           </div>
         </div>
       </div>
