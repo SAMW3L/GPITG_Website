@@ -226,7 +226,7 @@ const Footer: React.FC = () => {
               Terms of Service
             </Link>
             <a
-              href="/login"
+              href="/admin"
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-500 hover:text-white transition-colors flex items-center"

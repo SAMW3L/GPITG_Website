@@ -9,11 +9,11 @@ import Faq from './pages/Faq';
 import Careers from './pages/Careers'
 import Products from './pages/Products';
 import NotFound from './pages/NotFound';
-import AdminPortal from './pages/Admin';
-import News from './pages/News';
-import Gallery from './pages/Gallery';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
+import Admin from './pages/Admin';
+import News from './pages/News';
+import Gallery from './pages/Gallery';
 import ChatProvider from './components/Chat/ChatProvider';
 import ChatWidget from './components/Chat/ChatWidget';
 import ScrollToTop from './components/ScrollToTop';
@@ -22,7 +22,7 @@ function App() {
   return (
     <ChatProvider>
       <Router>
-        <ScrollToTop />
+        <ScrollToTop /> {/* Add this line */}
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
@@ -32,11 +32,11 @@ function App() {
             <Route path="contact" element={<Contact />} />
             <Route path="faq" element={<Faq />} />
             <Route path="careers" element={<Careers />} />
-            <Route path="privacy-policy" element={<PrivacyPolicy />} />
-            <Route path="terms-of-service" element={<TermsOfService />} />
-            <Route path="admin" element={<AdminPortal />} />
+            <Route path="admin" element={<Admin />} />
             <Route path="news" element={<News />} />
             <Route path="gallery" element={<Gallery />} />
+            <Route path="privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="terms-of-service" element={<TermsOfService />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
