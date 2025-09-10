@@ -6,7 +6,7 @@ import { API_BASE_URL } from '../../Constants';
 
 
 interface NewsItem {
-  id: number; // Use number to match Laravel's ID type
+  id: number; 
   title: string;
   description: string;
   content: string;
@@ -17,7 +17,7 @@ interface NewsItem {
 }
 
 interface GalleryItem {
-  id: number; // Use number to match Laravel's ID type
+  id: number; 
   title: string;
   description: string;
   type: 'image' | 'video';
@@ -273,11 +273,6 @@ const Admin: React.FC = () => {
               Login
             </button>
           </form>
-
-          <div className="mt-6 text-center text-sm text-gray-500">
-            <p>Demo credentials:</p>
-            <p>Username: admin | Password: gpitg2024</p>
-          </div>
         </motion.div>
       </div>
     );

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Calendar, User, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import Marquee from 'react-fast-marquee';
+// import Marquee from 'react-fast-marquee';
 import Slider from 'react-slick';
 import axios from 'axios';
 import { API_BASE_URL } from '../../../Constants';  
@@ -51,7 +51,7 @@ const NewsHeadlines: React.FC = () => {
     });
   };
 
-  // Slider settings for a more professional look
+  // Slider settings 
   const sliderSettings = {
     dots: true,
     infinite: true,
@@ -60,7 +60,7 @@ const NewsHeadlines: React.FC = () => {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3000,
-    arrows: false, // Hide default arrows for a cleaner look
+    arrows: false, 
     responsive: [
       {
         breakpoint: 1024,
@@ -80,9 +80,9 @@ const NewsHeadlines: React.FC = () => {
   };
 
   return (
-    <div className="pt-16 pb-16 bg-gray-100 font-sans">
+    <div className=" bg-gray-100 font-sans">
       {/* Marquee Section */}
-      <div className="bg-sky-700 text-white py-3 overflow-hidden shadow-lg">
+      {/* <div className="bg-sky-700 text-white py-3 overflow-hidden shadow-lg">
         <Marquee gradient={false} speed={40} pauseOnHover={true}>
           {newsItems.length > 0 ? (
             newsItems.map((item, index) => (
@@ -106,7 +106,7 @@ const NewsHeadlines: React.FC = () => {
             </div>
           )}
         </Marquee>
-      </div>
+      </div> */}
       
       {/* Main Content */}
       <div className="container mx-auto px-4">
@@ -116,7 +116,7 @@ const NewsHeadlines: React.FC = () => {
             Latest News & Insights
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Stay updated with the most recent developments, announcements, and insights from GPITG Limited, driving innovation in our industry.
+            Stay updated with the most recent updates, announcements, and insights from GPITG Limited, driving innovation in our industry.
           </p>
         </div>
 
@@ -136,7 +136,7 @@ const NewsHeadlines: React.FC = () => {
                     onClick={() => navigate('/news')}
                   >
                     {/* Featured Image - Smaller size */}
-                    <div className="w-full h-32 bg-gray-200 overflow-hidden">
+                    <div className="w-full h-50 bg-gray-200 overflow-hidden">
                       <img
                         src={item.image || 'https://images.pexels.com/photos/3183153/pexels-photo-3183153.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&dpr=1'}
                         alt={item.title}

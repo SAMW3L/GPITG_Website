@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Calendar, User, Search, ArrowLeft, ArrowRight } from 'lucide-react';
 import axios from 'axios';
+import { API_BASE_URL } from '../../Constants';  
 
-// Define the base URL for your Laravel API
-const API_URL = 'http://localhost:8000/api';
 
 interface NewsItem {
   id: number;
@@ -24,16 +23,20 @@ const News: React.FC = () => {
   const [filteredNews, setFilteredNews] = useState<NewsItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Use a single useEffect to handle data fetching from the API
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const newsPerPage = 6;
+  const maxPageButtons = 10;
+
   useEffect(() => {
     document.title = 'News - GPITG Limited';
 
     const fetchNews = async () => {
       try {
-        const response = await axios.get(`${API_URL}/news`);
+        const response = await axios.get(`${API_BASE_URL}/news`);
         const sortedNews = response.data.sort((a: NewsItem, b: NewsItem) => new Date(b.date).getTime() - new Date(a.date).getTime());
         setNewsItems(sortedNews);
-        setFilteredNews(sortedNews); // Initialize filtered news with all items
+        setFilteredNews(sortedNews);
       } catch (error) {
         console.error('Failed to fetch news:', error);
       } finally {
@@ -44,7 +47,7 @@ const News: React.FC = () => {
     fetchNews();
   }, []);
 
-  // Effect for filtering news based on search term
+  // Effect for filtering news based on search term and resetting pagination 🎯
   useEffect(() => {
     const filtered = newsItems.filter(item =>
       item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -52,6 +55,7 @@ const News: React.FC = () => {
       item.content.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredNews(filtered);
+    setCurrentPage(1); // Reset to the first page on a new search
   }, [searchTerm, newsItems]);
 
   const formatDate = (dateString: string) => {
@@ -72,9 +76,35 @@ const News: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
   
-  // Single Article View with a two-column layout
+  // Calculate news for the current page
+  const indexOfLastNews = currentPage * newsPerPage;
+  const indexOfFirstNews = indexOfLastNews - newsPerPage;
+  const currentNews = filteredNews.slice(indexOfFirstNews, indexOfLastNews);
+
+  const totalPages = Math.ceil(filteredNews.length / newsPerPage);
+
+  const renderPageButtons = () => {
+    const pageButtons = [];
+    const startPage = Math.max(1, currentPage - Math.floor(maxPageButtons / 2));
+    const endPage = Math.min(totalPages, startPage + maxPageButtons - 1);
+
+    for (let i = startPage; i <= endPage; i++) {
+      pageButtons.push(
+        <button
+          key={i}
+          onClick={() => setCurrentPage(i)}
+          className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200
+            ${currentPage === i ? 'bg-sky-600 text-white shadow-lg' : 'bg-white text-gray-700 hover:bg-sky-100'}`}
+        >
+          {i}
+        </button>
+      );
+    }
+    return pageButtons;
+  };
+
   if (selectedNews) {
-    const relatedNews = newsItems.filter(item => item.id !== selectedNews.id).slice(0, 3);
+    const relatedNews = newsItems.filter(item => item.id !== selectedNews.id).slice(0, 10);
 
     return (
       <div className="pt-24 min-h-screen bg-gray-100 font-sans">
@@ -88,7 +118,6 @@ const News: React.FC = () => {
           </button>
 
           <div className="flex flex-col lg:flex-row gap-8">
-            {/* Main Article Content (Left Column) */}
             <motion.article
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
@@ -134,7 +163,6 @@ const News: React.FC = () => {
               </div>
             </motion.article>
 
-            {/* More Articles Sidebar (Right Column) */}
             {relatedNews.length > 0 && (
               <motion.div
                 initial={{ opacity: 0, x: 30 }}
@@ -223,7 +251,6 @@ const News: React.FC = () => {
           />
         </motion.div>
 
-        {/* Loading State */}
         {isLoading && (
           <div className="text-center py-24">
             <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-sky-500 mx-auto mb-4"></div>
@@ -231,10 +258,9 @@ const News: React.FC = () => {
           </div>
         )}
 
-        {/* Content State */}
-        {!isLoading && filteredNews.length > 0 ? (
+        {!isLoading && currentNews.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
-            {filteredNews.map((item, index) => (
+            {currentNews.map((item, index) => (
               <motion.article
                 key={item.id}
                 initial={{ opacity: 0, y: 20 }}
@@ -283,7 +309,6 @@ const News: React.FC = () => {
             ))}
           </div>
         ) : (
-          /* Empty State */
           !isLoading && (
             <motion.div
               initial={{ opacity: 0 }}
@@ -314,6 +339,30 @@ const News: React.FC = () => {
             </motion.div>
           )
         )}
+
+        {/* Dynamic Pagination */}
+        {totalPages > 1 && (
+          <div className="mt-12 flex justify-center items-center space-x-3">
+            {renderPageButtons()}
+            {currentPage > 1 && (
+              <button
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                className="px-4 py-2 bg-sky-600 text-white rounded-lg shadow font-medium transition-colors hover:bg-sky-700"
+              >
+                Previous
+              </button>
+            )}
+            {currentPage < totalPages && (
+              <button
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                className="px-4 py-2 bg-sky-600 text-white rounded-lg shadow font-medium transition-colors hover:bg-sky-700"
+              >
+                Next
+              </button>
+            )}
+          </div>
+        )}
+          
       </div>
     </div>
   );

@@ -1,1 +1,1 @@
-admin for admin to login and post news or gallery, news for user to view news posted by admin, gallery for user or visitor to view pictures and videos. Admin can login and post a news with picture or video, date and discriptions
+Implement SEO

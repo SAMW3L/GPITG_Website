@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
 
+import NewsMarquee from '../NewsMarquee';
+
 const Hero: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -22,8 +24,6 @@ const Hero: React.FC = () => {
       title: 'Point of Sale System',
       subtitle: 'G-PoS - Retail Excellence',
       description: 'Advanced POS system for retail and wholesale businesses with inventory management, TRA integration, and multi-payment support.',
-      cta: 'View More About G-PoS',
-      link: '/products'
     },
     {
       id: 3,
@@ -59,7 +59,6 @@ const Hero: React.FC = () => {
   const prevSlide = () => {
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
   };
-
 
   return (
     <section className="relative h-screen overflow-hidden">
@@ -134,7 +133,7 @@ const Hero: React.FC = () => {
                   className="flex flex-col sm:flex-row gap-4"
                 >
                   <Link
-                    to={slides[currentSlide].link}
+                    to={slides[currentSlide].link ?? '/products'}
                     className="group bg-sky-500 hover:bg-sky-600 text-white font-semibold py-4 px-8 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95 flex items-center justify-center btn-bounce"
                   >
                     {slides[currentSlide].cta}
@@ -186,8 +185,14 @@ const Hero: React.FC = () => {
       >
         <ChevronRight size={24} />
       </button>
+      
+      {/* News Marquee to the bottom */}
+      <div className="absolute bottom-5 inset-x-0 z-50">
+        <NewsMarquee />
+      </div>
     </section>
   );
 };
 
 export default Hero;
+
