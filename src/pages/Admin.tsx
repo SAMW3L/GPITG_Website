@@ -119,22 +119,37 @@ const Admin: React.FC = () => {
   };
 
   const handleNewsSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const payload = { ...newsForm, author: 'Admin' };
-    try {
-      if (editingNews) {
-        await axios.put(`${API_BASE_URL}/news/${editingNews.id}`, payload);
-      } else {
-        await axios.post(`${API_BASE_URL}/news`, payload);
-      }
-      fetchData();
-      resetNewsForm();
-    } catch (error) {
-      console.error('Failed to save news:', error);
-      alert('Failed to save news. Please check your inputs.');
-    }
-  };
+  e.preventDefault();
+  const formData = new FormData();
+  formData.append('title', newsForm.title);
+  formData.append('description', newsForm.description);
+  formData.append('content', newsForm.content);
+  formData.append('date', newsForm.date);
+  formData.append('author', 'Admin');
 
+  if (newsForm.image) {
+    formData.append('image', newsForm.image);
+  }
+  if (newsForm.video) {
+    formData.append('video', newsForm.video);
+  }
+
+  try {
+    if (editingNews) {
+      formData.append('_method', 'POST');
+      await axios.post(`${API_BASE_URL}/news/${editingNews.id}`, formData);
+    } else {
+      await axios.post(`${API_BASE_URL}/news`, formData);
+    }
+    
+    fetchData();
+    resetNewsForm();
+    alert('News item saved successfully!');
+  } catch (error) {
+    console.error('Failed to save news:', error);
+    alert('Failed to save news. Please check your inputs.');
+  }
+};
   const handleGallerySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const formData = new FormData();
@@ -142,9 +157,8 @@ const Admin: React.FC = () => {
     formData.append('description', galleryForm.description);
     formData.append('type', galleryForm.type);
     formData.append('date', galleryForm.date);
-    
-    // Append the file or URL based on user input
-    if (galleryForm.mediaFile) {
+
+    if (galleryForm.mediaFile) {  
       formData.append('file', galleryForm.mediaFile);
     } else if (galleryForm.url) {
       formData.append('url', galleryForm.url);
@@ -152,19 +166,20 @@ const Admin: React.FC = () => {
 
     try {
       if (editingGallery) {
-        // Laravel needs a specific method override for PUT with FormData
-        formData.append('_method', 'PUT');
+        formData.append('_method', 'POST');
         await axios.post(`${API_BASE_URL}/gallery/${editingGallery.id}`, formData);
       } else {
         await axios.post(`${API_BASE_URL}/gallery`, formData);
       }
+      
       fetchData();
       resetGalleryForm();
+      alert('Gallery item saved successfully!');
     } catch (error) {
       console.error('Failed to save gallery item:', error);
       alert('Failed to save gallery item. Please check your inputs.');
     }
-  };
+};
 
   const deleteNews = async (id: number) => {
     if (window.confirm('Are you sure you want to delete this news item?')) {
@@ -593,9 +608,7 @@ const Admin: React.FC = () => {
                             src={item.url}
                             alt={item.title}
                             className="w-full h-full object-cover"
-                            onError={(e) => {
-                              e.currentTarget.src = 'https://via.placeholder.com/300x200/0ea5e9/ffffff?text=Image';
-                            }}
+                           
                           />
                         ) : (
                           <Video className="w-12 h-12 text-gray-400" />
