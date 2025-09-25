@@ -7,10 +7,9 @@ const Footer: React.FC = () => {
     <footer className="bg-gradient-to-br from-sky-900 via-sky-900 to-gray-900 text-white pt-20 pb-8 relative overflow-hidden">
       <div className="container mx-auto px-4 md:px-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Company Information */}
           <div>
-            <div className="flex items-center space-x-2 mb-4">
-              <img 
+            <div className="flex items-center space-x-2 mb-4 margin-bottom: 1rem;">
+              <img style={{backgroundColor: 'white' , borderRadius: '4px'}}
                 src="/logo.png" 
                 alt="GPITG Logo" 
                 className="h-12 mr-1 rounded-lg" 
@@ -225,14 +224,9 @@ const Footer: React.FC = () => {
             <Link to="/terms-of-service" className="text-gray-500 hover:text-white transition-colors">
               Terms of Service
             </Link>
-            <a
-              href="/admin"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-500 hover:text-white transition-colors flex items-center"
-            >
-              <User size={16} className="mr-1" /> Admin Portal
-            </a>
+            <Link to="/admin" className="text-gray-500 hover:text-white transition-colors flex items-center">
+              <User size={16} className="mr-1" /> Admin
+            </Link>
           </div>
         </div>
       </div>

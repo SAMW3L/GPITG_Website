@@ -61,12 +61,11 @@ import React, {
       localStorage.setItem('chatMessages', JSON.stringify(messages));
     }, [messages]);
   
-    // Initial greeting
     useEffect(() => {
       if (isChatOpen && messages.length === 0) {
         const greeting: Message = {
           id: uuidv4(),
-          content: "Hi there! I'm your Assistant. How can I help you today?",
+          content: "Hi there!  I'm your Assistant. How can I help you today?",
           sender: 'bot',
           timestamp: new Date(),
         };
@@ -78,7 +77,7 @@ import React, {
   const lower = userMessage.toLowerCase();
 
   // responses for specific products and services
-  if (/\b(ehms|electronic health|hospital management|healthcare system|ehms features)\b/.test(lower)) {
+  if (/\b(ehms|electronic health|hospital management|afya|healthcare system|ehms features)\b/.test(lower)) {
     return "eHMS is our comprehensive Electronic Health Management System. It's a locally developed solution that's integrated with NHIF electronic billing and supports interoperability with laboratory and radiology devices. Would you like to know more about its key features like patient management or telemedicine?";
   }
 

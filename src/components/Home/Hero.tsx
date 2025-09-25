@@ -24,6 +24,8 @@ const Hero: React.FC = () => {
       title: 'Point of Sale System',
       subtitle: 'G-PoS - Retail Excellence',
       description: 'Advanced POS system for retail and wholesale businesses with inventory management, TRA integration, and multi-payment support.',
+      cta: 'Explore G-PoS',
+      link: '/products'
     },
     {
       id: 3,
@@ -31,7 +33,7 @@ const Hero: React.FC = () => {
       title: 'Digital Payment Solution',
       subtitle: 'G-Pesa - Business Automation',
       description: 'Integrated payment system connecting banks and mobile networks with ERP design for complete business automation.',
-      cta: 'Discover More About G-Pesa',
+      cta: 'Explore More',
       link: '/products'
     },
     {
@@ -40,7 +42,7 @@ const Hero: React.FC = () => {
       title: 'Appointment Management',
       subtitle: 'G-Appointment - Smart Scheduling',
       description: 'State-of-the-art appointment management system with multi-platform access and real-time scheduling capabilities.',
-      cta: 'Learn More',
+      cta: 'Explore More',
       link: '/products'
     }
   ];
@@ -130,7 +132,7 @@ const Hero: React.FC = () => {
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.6 }}
-                  className="flex flex-col sm:flex-row gap-4"
+                  className="flex flex-row sm:flex-row gap-4"
                 >
                   <Link
                     to={slides[currentSlide].link ?? '/products'}
@@ -174,14 +176,14 @@ const Hero: React.FC = () => {
       {/* Side Navigation */}
       <button
         onClick={prevSlide}
-        className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white p-3 rounded-full transition-all duration-300 z-30 btn-bounce"
+        className="absolute left-4 top-1/2 transform -translate-y-1/2   hover:bg-white/30 text-white p-3 rounded-full transition-all duration-300 z-30 btn-bounce"
       >
         <ChevronLeft size={24} />
       </button>
       
       <button
         onClick={nextSlide}
-        className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white p-3 rounded-full transition-all duration-300 z-30 btn-bounce"
+        className="absolute right-4 top-1/2 transform -translate-y-1/2   hover:bg-white/30 text-white p-3 rounded-full transition-all duration-300 z-30 btn-bounce"
       >
         <ChevronRight size={24} />
       </button>

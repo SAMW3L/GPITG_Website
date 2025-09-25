@@ -20,7 +20,6 @@ const Services: React.FC = () => {
   useEffect(() => {
     document.title = 'Our Services - GPITG Limmited';
     
-    // Check if there's a hash in the URL and scroll to that section
     if (location.hash) {
       const id = location.hash.replace('#', '');
       const element = document.getElementById(id);

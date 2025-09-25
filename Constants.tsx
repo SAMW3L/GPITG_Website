@@ -2,7 +2,7 @@
 export const APP_NAME = "GpitgWebsite";
 
 
-export const API_BASE_URL = 'http://localhost:8000/api'; 
+export const API_BASE_URL = 'http://41.188.172.204:30017/api'; 
 export const numberFormat = (number: { toString: () => string }) => {
   const parts = number.toString().split(".");
   parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");

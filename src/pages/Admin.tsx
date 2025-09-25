@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
-import { User, Lock, Eye, EyeOff, Plus, Edit, Trash2, Image, Video, Calendar, FileText } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { User, Lock, Eye, EyeOff, Plus, Edit, Trash2, Image, Video, Calendar, FileText, X, CheckCircle, XCircle } from 'lucide-react';
 import axios from 'axios';
 import { API_BASE_URL } from '../../Constants';
-
+import ToastMessage from '../components/ToastMessage';
 
 interface NewsItem {
-  id: number; 
+  id: number;
   title: string;
   description: string;
   content: string;
@@ -17,13 +17,15 @@ interface NewsItem {
 }
 
 interface GalleryItem {
-  id: number; 
+  id: number;
   title: string;
   description: string;
   type: 'image' | 'video';
   url: string;
   date: string;
 }
+
+
 
 const Admin: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -36,6 +38,8 @@ const Admin: React.FC = () => {
   const [showGalleryForm, setShowGalleryForm] = useState(false);
   const [editingNews, setEditingNews] = useState<NewsItem | null>(null);
   const [editingGallery, setEditingGallery] = useState<GalleryItem | null>(null);
+  const [toast, setToast] = useState({ message: '', type: 'success' as 'success' | 'error' | null });
+  const [showToast, setShowToast] = useState(false);
 
   const [newsForm, setNewsForm] = useState({
     title: '', description: '', content: '', image: '', video: '',
@@ -50,7 +54,13 @@ const Admin: React.FC = () => {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Use a single useEffect to handle authentication and initial data fetching
+  // A helper function to show a toast message
+  const showToastMessage = (message: string, type: 'success' | 'error') => {
+    setToast({ message, type });
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 3000);
+  };
+
   useEffect(() => {
     document.title = 'Admin Panel - GPITG Limited';
     const token = localStorage.getItem('authToken');
@@ -72,6 +82,9 @@ const Admin: React.FC = () => {
       console.error('Failed to fetch data', error);
       if (axios.isAxiosError(error) && error.response?.status === 401) {
         handleLogout();
+        showToastMessage('Session expired. Please log in again.', 'error');
+      } else {
+        showToastMessage('Failed to fetch data. Please try again later.', 'error');
       }
     }
   };
@@ -84,9 +97,11 @@ const Admin: React.FC = () => {
       localStorage.setItem('authToken', token);
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       setIsLoggedIn(true);
-      fetchData(); // Fetch data immediately after successful login
+      fetchData();
+      showToastMessage('Login successful!', 'success');
     } catch (error) {
-      alert('Invalid credentials');
+      console.error('Login failed:', error);
+      showToastMessage('This is for Authorized Personel Only.', 'error');
     }
   };
 
@@ -94,6 +109,7 @@ const Admin: React.FC = () => {
     localStorage.removeItem('authToken');
     delete axios.defaults.headers.common['Authorization'];
     setIsLoggedIn(false);
+    showToastMessage('Logged out successfully.', 'success');
   };
 
   const resetNewsForm = () => {
@@ -119,37 +135,39 @@ const Admin: React.FC = () => {
   };
 
   const handleNewsSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  const formData = new FormData();
-  formData.append('title', newsForm.title);
-  formData.append('description', newsForm.description);
-  formData.append('content', newsForm.content);
-  formData.append('date', newsForm.date);
-  formData.append('author', 'Admin');
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append('title', newsForm.title);
+    formData.append('description', newsForm.description);
+    formData.append('content', newsForm.content);
+    formData.append('date', newsForm.date);
+    formData.append('author', 'Admin');
 
-  if (newsForm.image) {
-    formData.append('image', newsForm.image);
-  }
-  if (newsForm.video) {
-    formData.append('video', newsForm.video);
-  }
-
-  try {
-    if (editingNews) {
-      formData.append('_method', 'POST');
-      await axios.post(`${API_BASE_URL}/news/${editingNews.id}`, formData);
-    } else {
-      await axios.post(`${API_BASE_URL}/news`, formData);
+    if (newsForm.image) {
+      formData.append('image', newsForm.image);
     }
-    
-    fetchData();
-    resetNewsForm();
-    alert('News item saved successfully!');
-  } catch (error) {
-    console.error('Failed to save news:', error);
-    alert('Failed to save news. Please check your inputs.');
-  }
-};
+    if (newsForm.video) {
+      formData.append('video', newsForm.video);
+    }
+
+    try {
+      if (editingNews) {
+        formData.append('_method', 'POST');
+        await axios.post(`${API_BASE_URL}/news/${editingNews.id}`, formData);
+        showToastMessage('News item updated successfully!', 'success');
+      } else {
+        await axios.post(`${API_BASE_URL}/news`, formData);
+        showToastMessage('News item added successfully!', 'success');
+      }
+      
+      fetchData();
+      resetNewsForm();
+    } catch (error) {
+      console.error('Failed to save news:', error);
+      showToastMessage('Failed to save news. Please check your inputs.', 'error');
+    }
+  };
+
   const handleGallerySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const formData = new FormData();
@@ -158,7 +176,7 @@ const Admin: React.FC = () => {
     formData.append('type', galleryForm.type);
     formData.append('date', galleryForm.date);
 
-    if (galleryForm.mediaFile) {  
+    if (galleryForm.mediaFile) {
       formData.append('file', galleryForm.mediaFile);
     } else if (galleryForm.url) {
       formData.append('url', galleryForm.url);
@@ -168,27 +186,29 @@ const Admin: React.FC = () => {
       if (editingGallery) {
         formData.append('_method', 'POST');
         await axios.post(`${API_BASE_URL}/gallery/${editingGallery.id}`, formData);
+        showToastMessage('Gallery item updated successfully!', 'success');
       } else {
         await axios.post(`${API_BASE_URL}/gallery`, formData);
+        showToastMessage('Gallery item added successfully!', 'success');
       }
       
       fetchData();
       resetGalleryForm();
-      alert('Gallery item saved successfully!');
     } catch (error) {
       console.error('Failed to save gallery item:', error);
-      alert('Failed to save gallery item. Please check your inputs.');
+      showToastMessage('Failed to save gallery item. Please check your inputs.', 'error');
     }
-};
+  };
 
   const deleteNews = async (id: number) => {
     if (window.confirm('Are you sure you want to delete this news item?')) {
       try {
         await axios.delete(`${API_BASE_URL}/news/${id}`);
         fetchData();
+        showToastMessage('News item deleted successfully!', 'success');
       } catch (error) {
         console.error('Failed to delete news:', error);
-        alert('Failed to delete news. Please try again.');
+        showToastMessage('Failed to delete news. Please try again.', 'error');
       }
     }
   };
@@ -198,9 +218,10 @@ const Admin: React.FC = () => {
       try {
         await axios.delete(`${API_BASE_URL}/gallery/${id}`);
         fetchData();
+        showToastMessage('Gallery item deleted successfully!', 'success');
       } catch (error) {
         console.error('Failed to delete gallery item:', error);
-        alert('Failed to delete gallery item. Please try again.');
+        showToastMessage('Failed to delete gallery item. Please try again.', 'error');
       }
     }
   };
@@ -234,6 +255,9 @@ const Admin: React.FC = () => {
   if (!isLoggedIn) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-sky-50 to-sky-100 flex items-center justify-center px-4 pt-20">
+        <AnimatePresence>
+          {showToast && toast.message && <ToastMessage message={toast.message} type={toast.type!} onClose={() => setShowToast(false)} />}
+        </AnimatePresence>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -245,7 +269,7 @@ const Admin: React.FC = () => {
               <User className="w-10 h-10 text-sky-600" />
             </div>
             <h1 className="text-2xl font-bold text-gray-800">Admin Login</h1>
-            <p className="text-gray-600">Access the admin panel</p>
+            <p className="text-gray-600">This is for Authorized User Only</p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-6">
@@ -253,6 +277,7 @@ const Admin: React.FC = () => {
               <label className="block text-sm font-medium text-gray-700 mb-2">Username</label>
               <input
                 type="text"
+                placeholder='Enter Username'
                 value={loginForm.username}
                 onChange={(e) => setLoginForm({...loginForm, username: e.target.value})}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent"
@@ -265,6 +290,7 @@ const Admin: React.FC = () => {
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
+                  placeholder='Enter Password'
                   value={loginForm.password}
                   onChange={(e) => setLoginForm({...loginForm, password: e.target.value})}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent pr-12"
@@ -295,6 +321,9 @@ const Admin: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 pt-20">
+      <AnimatePresence>
+        {showToast && toast.message && <ToastMessage message={toast.message} type={toast.type!} onClose={() => setShowToast(false)} />}
+      </AnimatePresence>
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-8">

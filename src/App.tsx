@@ -22,7 +22,7 @@ function App() {
   return (
     <ChatProvider>
       <Router>
-        <ScrollToTop /> {/* Add this line */}
+        <ScrollToTop /> 
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
