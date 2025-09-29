@@ -138,7 +138,7 @@ const About: React.FC = () => {
               viewport={{ once: true }}
             >
               <img
-                src="https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                src="/Web.png"
                 alt="Our team working together"
                 className="rounded-lg shadow-xl w-full"
               />
@@ -250,7 +250,7 @@ const About: React.FC = () => {
               className="order-2 lg:order-1"
             >
               <img
-                src="https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                src="/Web.png"
                 alt="Team collaboration"
                 className="rounded-lg shadow-xl w-full"
               />

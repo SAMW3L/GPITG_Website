@@ -50,7 +50,7 @@ const Navbar: React.FC = () => {
             <img 
               src="/logo.png" 
               alt="GPITG Logo" 
-              className="h-12 mr-1 rounded-md" 
+              className="h-24 mr-1 rounded-md" 
             />
           </Link>
 

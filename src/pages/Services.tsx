@@ -37,6 +37,7 @@ const Services: React.FC = () => {
       title: 'System Design & Development',
       icon: <Code2Icon className="w-16 h-16 text-blue-500" />,
       description: 'We develop custom software solutions to streamline your business processes.',
+      image: '/soft-developers.png',
       features: [
         'Custom software development',
         'Enterprise resource planning (ERP) systems',
@@ -52,6 +53,7 @@ const Services: React.FC = () => {
       title: 'Project Management',
       icon: <Globe className="w-16 h-16 text-blue-500" />,
       description: 'We have assisted organizational projects in terms of risk management scheduling management communications management leadership quality management cost management and much more.',
+      image: '/project-management.png',
       features: [
         'Risk management',
         'Scheduling management',
@@ -67,6 +69,7 @@ const Services: React.FC = () => {
       title: 'Systems Integration',
       icon: <FaCogs className='w-16 h-16 text-blue-500' />,
       description: 'GPITG is equipped with innovative engineers’ team that has lengthy experience and strong knowledge with amazing skills to make various organizational IT systems to “talk to each other” through the integration technologies.',
+      image: '/system-integration.png',
       features: [
         'e-banking integrations',
         'mobile payments integrations',
@@ -80,6 +83,7 @@ const Services: React.FC = () => {
       title: 'Website design, Development, Hosting & Maintenance, SEO & Digital Marketing',
       icon: <Search className="w-16 h-16 text-blue-500" />,
       description: 'We provide reliable hosting services and regular maintenance to keep your website running smoothly.',
+      image: '/web-development.png',
       features: [
         'Web application development',
         'Website maintenance and support',
@@ -101,6 +105,7 @@ const Services: React.FC = () => {
       title: 'IT Consulting',
       icon: <Headphones className="w-16 h-16 text-blue-500" />,
       description: 'We provide strategic advice to help your business make informed technology decisions.',
+      image: '/it-consulting.png',
       features: [
         'IT strategy development',
         'Technology assessment and recommendations',
@@ -194,16 +199,14 @@ const Services: React.FC = () => {
                     viewport={{ once: true }}
                     className={`${index % 2 === 1 ? 'order-1 lg:order-2' : ''}`}
                   >
-                    <div className="bg-gray-200 rounded-lg p-8 h-full flex items-center justify-center">
-                      <img
-                        src={`https://images.pexels.com/photos/${3000 + index * 100}/pexels-photo-${3000 + index * 100}.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1`}
-                        alt={service.title}
-                        className="rounded-lg shadow-md max-h-80 object-cover"
-                        onError={(e) => {
-                          e.currentTarget.src = 'https://images.pexels.com/photos/3183153/pexels-photo-3183153.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1';
-                        }}
-                      />
-                    </div>
+                    <img
+                      src={service.image}
+                      alt={service.title}
+                      className="rounded-lg shadow-lg w-full h-auto object-cover"
+                      onError={(e) => {
+                        e.currentTarget.src = 'https://images.pexels.com/photos/3183153/pexels-photo-3183153.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1';
+                      }}
+                    />                   
                   </motion.div>
                 </div>
               </div>

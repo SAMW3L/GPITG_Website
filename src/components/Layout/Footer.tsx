@@ -9,10 +9,10 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div>
             <div className="flex items-center space-x-2 mb-4 margin-bottom: 1rem;">
-              <img style={{backgroundColor: 'white' , borderRadius: '4px'}}
+              <img style={{backgroundColor: '' , borderRadius: ''}}
                 src="/logo.png" 
                 alt="GPITG Logo" 
-                className="h-12 mr-1 rounded-lg" 
+                className="h-20 mr-1 rounded-lg" 
               />
             </div>
 
@@ -142,27 +142,27 @@ const Footer: React.FC = () => {
             </h3>
             <ul className="space-y-3">
               <li>
-                <Link to="/services" className="text-gray-400 hover:text-white transition-colors">
+                <Link to="/services#system-dev" className="text-gray-400 hover:text-white transition-colors">
                   System Design & Development.
                 </Link>
               </li>
               <li>
-                <Link to="/services" className="text-gray-400 hover:text-white transition-colors">
+                <Link to="/services#project-management" className="text-gray-400 hover:text-white transition-colors">
                   Project Management
                 </Link>
               </li>
               <li>
-                <Link to="/services" className="text-gray-400 hover:text-white transition-colors">
+                <Link to="/services#system-intergation" className="text-gray-400 hover:text-white transition-colors">
                   Systems Integration
                 </Link>
               </li>
               <li>
-                <Link to="/services" className="text-gray-400 hover:text-white transition-colors">
+                <Link to="/services#hosting" className="text-gray-400 hover:text-white transition-colors">
                   Website design, Development, Hosting & Maintenance, SEO & Digital Marketing
                 </Link>
               </li>
               <li>
-                <Link to="/services" className="text-gray-400 hover:text-white transition-colors">
+                <Link to="/services#consulting" className="text-gray-400 hover:text-white transition-colors">
                   IT Consulting
                 </Link>
               </li>
